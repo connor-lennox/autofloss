@@ -1,18 +1,33 @@
 import logo from './logo.svg';
 import './App.css';
 import {flossSpecs} from './services/Flosser/flossSpec.ts';
-import {parseImage} from "./services/ImageParser";
+import {parseImage, pixelImageToImageData} from "./services/ImageParser";
 import {solvePattern} from "./services/Flosser/patternSolver.ts";
-import {useState} from "react";
+import {useEffect, useRef, useState} from "react";
 
 function App() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageData, setImageData] = useState(null);
 
+    const ImageCanvas = props => {
+        const canvasRef = useRef(null);
+
+        useEffect(() => {
+            const canvas = canvasRef.current
+            const ctx = canvas.getContext('2d')
+            if(selectedImage != null) {
+                ctx.putImageData(pixelImageToImageData(selectedImage),
+                    Math.floor((800 - selectedImage.width) / 2), (800 - selectedImage.height) / 2)
+            }
+        })
+
+        return <canvas ref={canvasRef} {...props}/>
+    }
+
   return (
     <div className="App">
       <header className="App-header">
-          {selectedImage != null ? <img src={URL.createObjectURL(selectedImage)} alt="" /> : null }
+          <ImageCanvas width='800' height='800'/>
         <p>
           Loaded {flossSpecs.length} floss specifications.
           <br/>
@@ -22,12 +37,14 @@ function App() {
           type="file"
           name="imageUpload"
           onChange={(event) => {
-            setSelectedImage(event.target.files[0]);
-            parseImage(URL.createObjectURL(event.target.files[0])).then(d => setImageData(d))
+            parseImage(URL.createObjectURL(event.target.files[0])).then(d => {
+                setSelectedImage(d);
+                setImageData(d);
+            })
           }}
         />
         <button
-            onClick={() => solvePattern(imageData, 3)}
+            onClick={() => setSelectedImage(solvePattern(imageData, 3))}
             disabled={imageData == null}
         >Solve</button>
       </header>

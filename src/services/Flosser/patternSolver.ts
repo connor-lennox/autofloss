@@ -16,6 +16,8 @@ export const solvePattern = (image: PixelImage, maxColors: number) => {
     })
 
     console.log(bestPixelColors)
+
+    return downsampledImage
 }
 
 const getColorFlossDistances = (color: Color): Map<FlossSpec, number> => {
