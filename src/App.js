@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import {specs} from './services/Flosser/flossSpec.ts';
+import {flossSpecs} from './services/Flosser/flossSpec.ts';
 import {parseImage} from "./services/ImageParser";
 import {solvePattern} from "./services/Flosser/patternSolver.ts";
 import {useState} from "react";
@@ -14,9 +14,9 @@ function App() {
       <header className="App-header">
           {selectedImage != null ? <img src={URL.createObjectURL(selectedImage)} alt="" /> : null }
         <p>
-          Loaded {specs.length} floss specifications.
+          Loaded {flossSpecs.length} floss specifications.
           <br/>
-          Example: {specs[10].name}
+          Example: {flossSpecs[10].name}
         </p>
         <input
           type="file"

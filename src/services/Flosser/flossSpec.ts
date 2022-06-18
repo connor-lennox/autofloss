@@ -15,7 +15,7 @@ type FlossJsonLine = {
     hex: string
 }
 
-export var specs: Array<FlossSpec> = (require('../../assets/floss_spec.json') as FlossJsonLine[]).map(
+export var flossSpecs: Array<FlossSpec> = (require('../../assets/floss_spec.json') as FlossJsonLine[]).map(
     f => {
         return {
             id: f.id,
