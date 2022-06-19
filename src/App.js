@@ -19,6 +19,19 @@ function App() {
                 ctx.imageSmoothingEnabled = false;
                 ctx.putImageData(pixelImageToImageData(selectedImage), 0, 0);
                 ctx.drawImage(canvas, 0, 0, selectedImage.width, selectedImage.height, 0, 0, 800, 800);
+                let xScale = 800 / selectedImage.width;
+                let yScale = 800 / selectedImage.height;
+
+                for(let x = 0; x < selectedImage.width; x++) {
+                    ctx.moveTo(x * xScale, 0);
+                    ctx.lineTo(x * xScale, 800);
+                    ctx.stroke();
+                }
+                for(let y = 0; y < selectedImage.height; y++) {
+                    ctx.moveTo(0, y * yScale);
+                    ctx.lineTo(800, y * yScale);
+                    ctx.stroke();
+                }
             }
         })
 
@@ -29,23 +42,18 @@ function App() {
     <div className="App">
       <header className="App-header">
           <ImageCanvas width='800' height='800'/>
-        <p>
-          Loaded {flossSpecs.length} floss specifications.
-          <br/>
-          Example: {flossSpecs[10].name}
-        </p>
         <input
           type="file"
           name="imageUpload"
           onChange={(event) => {
             parseImage(URL.createObjectURL(event.target.files[0])).then(d => {
-                setSelectedImage(d);
+                // setSelectedImage(d);
                 setImageData(d);
             })
           }}
         />
         <button
-            onClick={() => setSelectedImage(solvePattern(imageData, 25))}
+            onClick={() => setSelectedImage(solvePattern(imageData, 5))}
             disabled={imageData == null}
         >Solve</button>
       </header>
