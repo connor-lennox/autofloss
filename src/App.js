@@ -16,8 +16,9 @@ function App() {
             const canvas = canvasRef.current
             const ctx = canvas.getContext('2d')
             if(selectedImage != null) {
-                ctx.putImageData(pixelImageToImageData(selectedImage),
-                    Math.floor((800 - selectedImage.width) / 2), (800 - selectedImage.height) / 2)
+                ctx.imageSmoothingEnabled = false;
+                ctx.putImageData(pixelImageToImageData(selectedImage), 0, 0);
+                ctx.drawImage(canvas, 0, 0, selectedImage.width, selectedImage.height, 0, 0, 800, 800);
             }
         })
 
