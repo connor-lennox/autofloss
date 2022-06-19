@@ -29,3 +29,5 @@ export var flossSpecs: Array<FlossSpec> = (require('../../assets/floss_spec.json
         }
     }
 )
+
+export var whiteFlossSpec: FlossSpec = flossSpecs.find(fs => fs.id === 'White') || flossSpecs[0]
