@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {flossSpecs} from './services/Flosser/flossSpec.ts';
-import {parseImage, pixelImageToImageData} from "./services/ImageParser";
+import {parseImage, pixelImageToImageData} from "./services/ImageProcessing";
 import {solvePattern} from "./services/Flosser/patternSolver.ts";
 import {useEffect, useRef, useState} from "react";
 
@@ -45,7 +45,7 @@ function App() {
           }}
         />
         <button
-            onClick={() => setSelectedImage(solvePattern(imageData, 3))}
+            onClick={() => setSelectedImage(solvePattern(imageData, 25))}
             disabled={imageData == null}
         >Solve</button>
       </header>

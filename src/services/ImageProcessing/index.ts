@@ -59,21 +59,4 @@ export const parseImage = (imageURL: string) => {
     })
 }
 
-export const downsampleImage = (image: PixelImage, newWidth: number, newHeight: number): PixelImage => {
-    let wx = Math.floor(image.width / newWidth);
-    let wy = Math.floor(image.height / newHeight);
-
-    let newColors: Color[] = []
-
-    for(let y = 0; y < newHeight; y++) {
-        for(let x = 0; x < newWidth; x++) {
-            newColors.push(getImagePixel(image, x * wx, y * wy));
-        }
-    }
-
-    return {
-        data: newColors,
-        width: newWidth,
-        height: newHeight
-    }
-}
+export * from './downsampling'
