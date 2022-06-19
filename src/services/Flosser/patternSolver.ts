@@ -2,8 +2,8 @@ import {nearestNeighborDownsample, gaussianDownsample, PixelImage} from "../Imag
 import {Color, colorDistance} from "../Colors";
 import {FlossSpec, flossSpecs, whiteFlossSpec} from "./flossSpec";
 
-export const solvePattern = (image: PixelImage, maxColors: number) => {
-    let downsampledImage = gaussianDownsample(image, 90, 90)
+export const solvePattern = (image: PixelImage, targetWidth: number, targetHeight: number, maxColors: number) => {
+    let downsampledImage = gaussianDownsample(image, targetWidth, targetHeight)
 
     let pixelFlossDistances: Array<Map<FlossSpec, number>> = downsampledImage.data.map(pixel => getColorFlossDistances(pixel));
 

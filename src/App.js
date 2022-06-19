@@ -9,6 +9,10 @@ function App() {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageData, setImageData] = useState(null);
 
+    const widthInputRef = useRef();
+    const heightInputRef = useRef();
+    const maxColorsInputRef = useRef();
+
     const ImageCanvas = props => {
         const canvasRef = useRef(null);
 
@@ -52,8 +56,30 @@ function App() {
             })
           }}
         />
+
+          <label>Pattern Width:
+              <input
+                  ref={widthInputRef}
+                  type="number"
+                  defaultValue="50"
+              />
+          </label>
+          <label>Pattern Height:
+              <input
+                  ref={heightInputRef}
+                  type="number"
+                  defaultValue="50"
+              />
+          </label>
+          <label>Max Colors:
+              <input
+                  ref={maxColorsInputRef}
+                  type="number"
+                  defaultValue="5"
+              />
+          </label>
         <button
-            onClick={() => setSelectedImage(solvePattern(imageData, 5))}
+            onClick={() => setSelectedImage(solvePattern(imageData, parseInt(widthInputRef.current.value), parseInt(heightInputRef.current.value), parseInt(maxColorsInputRef.current.value)))}
             disabled={imageData == null}
         >Solve</button>
       </header>
