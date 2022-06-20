@@ -1,8 +1,14 @@
 import {nearestNeighborDownsample, gaussianDownsample, PixelImage} from "../ImageProcessing";
 import {Color, colorDistance} from "../Colors";
 import {FlossSpec, flossSpecs, whiteFlossSpec} from "./flossSpec";
+import {FlossUsage} from "../../components/FlossUsageTable";
 
-export const solvePattern = (image: PixelImage, targetWidth: number, targetHeight: number, maxColors: number) => {
+export type PatternResult = {
+    image: PixelImage,
+    flossUsage: Array<FlossUsage>
+}
+
+export const solvePattern = (image: PixelImage, targetWidth: number, targetHeight: number, maxColors: number): PatternResult => {
     let downsampledImage = gaussianDownsample(image, targetWidth, targetHeight)
 
     let pixelFlossDistances: Array<Map<FlossSpec, number>> = downsampledImage.data.map(pixel => getColorFlossDistances(pixel));
@@ -18,6 +24,16 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
         workingImage = applyColor(workingImage, pixelFlossDistances, bestSpec);
     }
 
+    let stitchesPerFloss: Map<FlossSpec, number> = workingImage.reduce((counts, color) => {
+        counts.set(color, (counts.get(color) + 1) || 0);
+        return counts;
+    }, new Map());
+
+    let flossUsage: Array<FlossUsage> = [...stitchesPerFloss.keys()].map(k => ({
+        spec: k,
+        stitches: stitchesPerFloss.get(k) || 0
+    }));
+
     let foundColorMapping: Color[] = workingImage.map(f => f.color);
 
     let finishedImage = {
@@ -26,7 +42,10 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
         height: downsampledImage.height
     }
 
-    return finishedImage
+    return {
+        image: finishedImage,
+        flossUsage: flossUsage
+    }
 }
 
 const getColorFlossDistances = (color: Color): Map<FlossSpec, number> => {
