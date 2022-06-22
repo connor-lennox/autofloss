@@ -20,21 +20,23 @@ function App() {
             const canvas = canvasRef.current
             const ctx = canvas.getContext('2d')
             if(patternResult != null) {
+                let canvasWidth = props.width, canvasHeight = props.height
+
                 let finishedImage = patternResult.image;
                 ctx.imageSmoothingEnabled = false;
                 ctx.putImageData(pixelImageToImageData(finishedImage), 0, 0);
-                ctx.drawImage(canvas, 0, 0, finishedImage.width, finishedImage.height, 0, 0, 800, 800);
-                let xScale = 800 / finishedImage.width;
-                let yScale = 800 / finishedImage.height;
+                ctx.drawImage(canvas, 0, 0, finishedImage.width, finishedImage.height, 0, 0, canvasWidth, canvasHeight);
+                let xScale = canvasWidth / finishedImage.width;
+                let yScale = canvasHeight / finishedImage.height;
 
                 for(let x = 0; x < finishedImage.width; x++) {
                     ctx.moveTo(x * xScale, 0);
-                    ctx.lineTo(x * xScale, 800);
+                    ctx.lineTo(x * xScale, canvasHeight);
                     ctx.stroke();
                 }
                 for(let y = 0; y < finishedImage.height; y++) {
                     ctx.moveTo(0, y * yScale);
-                    ctx.lineTo(800, y * yScale);
+                    ctx.lineTo(canvasWidth, y * yScale);
                     ctx.stroke();
                 }
             }
@@ -46,7 +48,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-          <ImageCanvas width='800' height='800'/>
+          { patternResult != null ? <ImageCanvas width={patternResult.image.width * 10} height={patternResult.image.height * 10}/> : null }
         <input
           type="file"
           name="imageUpload"
