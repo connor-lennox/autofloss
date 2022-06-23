@@ -12,7 +12,7 @@ export type FlossUsageTableProperties = {
 
 function FlossUsageTableEntry(props: FlossUsage) {
     return (
-        <tr>
+        <tr key={props.spec.id}>
             <td>{props.spec.name}</td>
             <td>{props.spec.id}</td>
             <td>{props.stitches}</td>
@@ -26,12 +26,16 @@ export default function FlossUsageTable(props: FlossUsageTableProperties) {
 
     return (
         <table>
-            <tr>
-                <th>Name</th>
-                <th>ID</th>
-                <th>Total Stitches</th>
-            </tr>
-            {rows}
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Total Stitches</th>
+                </tr>
+            </thead>
+            <tbody>
+                {rows}
+            </tbody>
         </table>
     )
 }
