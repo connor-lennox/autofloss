@@ -21,7 +21,6 @@ function FlossUsageTableEntry(props: FlossUsage) {
 }
 
 export default function FlossUsageTable(props: FlossUsageTableProperties) {
-    console.log(props)
     let rows = props.usages.map(usage => FlossUsageTableEntry(usage))
 
     return (
