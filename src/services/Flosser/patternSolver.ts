@@ -1,4 +1,4 @@
-import {nearestNeighborDownsample, gaussianDownsample, PixelImage} from "../ImageProcessing";
+import {gaussianDownsample, PixelImage} from "../ImageProcessing";
 import {Color, colorDistance} from "../Colors";
 import {FlossSpec, flossSpecs, whiteFlossSpec} from "./flossSpec";
 import {FlossUsage} from "../../components/FlossUsageTable";
@@ -20,7 +20,6 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
     for(let i = 0; i < maxColors; i++) {
         let bestSpec = findBestColorToAdd(workingImage, selectedColors, pixelFlossDistances);
         selectedColors.add(bestSpec);
-        console.log(bestSpec)
         workingImage = applyColor(workingImage, pixelFlossDistances, bestSpec);
     }
 
@@ -29,7 +28,7 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
         return counts;
     }, new Map());
 
-    let flossUsage: Array<FlossUsage> = [...stitchesPerFloss.keys()].map(k => ({
+    let flossUsage: Array<FlossUsage> = [...stitchesPerFloss.keys()].filter(s => s.id !== 'White').map(k => ({
         spec: k,
         stitches: stitchesPerFloss.get(k) || 0
     }));
