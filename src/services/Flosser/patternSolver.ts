@@ -5,6 +5,7 @@ import {FlossUsage} from "../../components/FlossUsageTable";
 
 export type PatternResult = {
     image: PixelImage,
+    flossSpecs: Array<FlossSpec>
     flossUsage: Array<FlossUsage>
 }
 
@@ -43,6 +44,7 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
 
     return {
         image: finishedImage,
+        flossSpecs: workingImage,
         flossUsage: flossUsage
     }
 }

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {PatternResult} from "../services/Flosser/patternSolver";
 import {pixelImageToImageData} from "../services/ImageProcessing";
 
@@ -21,11 +21,21 @@ export default function PatternViewer(props: PatterViewerProps) {
 
     let canvasWidth = finishedImage.width * canvasScale, canvasHeight = finishedImage.height * canvasScale;
 
+    const [hoveredFloss, setHoveredFloss] = useState("");
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (canvas) {
             const ctx = canvas.getContext('2d');
             if (ctx == null) throw new Error("failed to get canvas context");
+
+            // On mouse move, update the display of the hovered color
+            canvas.onmousemove = (ev: MouseEvent) => {
+                let rect = canvas.getBoundingClientRect();
+                let hoveredPixelX = Math.floor((ev.x - rect.x) / canvasScale), hoveredPixelY = Math.floor((ev.y - rect.y) / canvasScale);
+                let hoveredFloss = props.pattern.flossSpecs[finishedImage.width * hoveredPixelY + hoveredPixelX];
+                setHoveredFloss("(" + hoveredPixelX + ", " + hoveredPixelY + "): " + hoveredFloss.name + " : " + hoveredFloss.id);
+            }
 
             // Clear anything that used to be on our canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -55,5 +65,8 @@ export default function PatternViewer(props: PatterViewerProps) {
         }
     })
 
-    return <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}/>;
+    return <div>
+            <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}/>
+            <p>{hoveredFloss}</p>
+        </div>
 }
