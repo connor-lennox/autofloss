@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useEffect, useRef} from "react";
 
 const enum SelectionType {
     ABSOLUTE = "Absolute",
@@ -45,6 +45,8 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
             props.callback({width: fabricWidthRef.current!.valueAsNumber * fabricCount, height: fabricHeightRef.current!.valueAsNumber * fabricCount})
         }
     }
+
+    useEffect(() => onChange, [props])
 
     return <div>
         <label>Dimension Method:

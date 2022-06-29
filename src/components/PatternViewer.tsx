@@ -63,7 +63,7 @@ export default function PatternViewer(props: PatterViewerProps) {
                 ctx.stroke();
             }
         }
-    })
+    }, [canvasHeight, canvasRef, canvasScale, canvasWidth, finishedImage, props.pattern.flossSpecs])
 
     return <div>
             <canvas ref={canvasRef} width={canvasWidth} height={canvasHeight}/>

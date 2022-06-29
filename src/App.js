@@ -19,39 +19,38 @@ function App() {
         setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value)))
     }
 
-  return (
-    <div className="App">
-      <header className="App-header">
-          { patternResult != null ? <PatternViewer pattern={patternResult} targetWidth={600} targetHeight={600}/> : null }
-        <input
-          type="file"
-          name="imageUpload"
-          onChange={(event) => {
-            parseImage(URL.createObjectURL(event.target.files[0])).then(d => {
-                // setSelectedImage(d);
-                setImageData(d);
-            })
-          }}
-        />
-          <SizeSpecEntry callback={setDimensions}/>
+    return (
+        <div className="App">
+            <body className="App-header">
+                { patternResult != null ? <PatternViewer pattern={patternResult} targetWidth={600} targetHeight={600}/> : null }
+                <input
+                    type="file"
+                    name="imageUpload"
+                    onChange={(event) => {
+                        parseImage(URL.createObjectURL(event.target.files[0])).then(d => {
+                            setImageData(d);
+                        })
+                    }}
+                />
+                <SizeSpecEntry callback={setDimensions}/>
 
-          <label>Max Colors:
-              <input
-                  ref={maxColorsInputRef}
-                  type="number"
-                  defaultValue="5"
-              />
-          </label>
-        <button
-            onClick={solveImage}
-            disabled={imageData == null}
-        >Solve</button>
+                <label>Max Colors:
+                  <input
+                      ref={maxColorsInputRef}
+                      type="number"
+                      defaultValue="5"
+                  />
+                </label>
+                <button
+                    onClick={solveImage}
+                    disabled={imageData == null}
+                >Solve</button>
 
-          {patternResult != null ?  <FlossUsageTable usages={patternResult.flossUsage}/> : null}
+              {patternResult != null ?  <FlossUsageTable usages={patternResult.flossUsage}/> : null}
 
-      </header>
-    </div>
-  );
+            </body>
+        </div>
+    );
 }
 
 export default App;
