@@ -52,12 +52,12 @@ export default function PatternViewer(props: PatterViewerProps) {
             let yScale = canvasHeight / finishedImage.height;
 
             // Draw gridlines
-            for (let x = 0; x < finishedImage.width; x++) {
+            for (let x = 0; x < finishedImage.width + 1; x++) {
                 ctx.moveTo(x * xScale, 0);
                 ctx.lineTo(x * xScale, canvasHeight);
                 ctx.stroke();
             }
-            for (let y = 0; y < finishedImage.height; y++) {
+            for (let y = 0; y < finishedImage.height + 1; y++) {
                 ctx.moveTo(0, y * yScale);
                 ctx.lineTo(canvasWidth, y * yScale);
                 ctx.stroke();
