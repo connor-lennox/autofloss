@@ -4,15 +4,20 @@ import {solvePattern} from "./services/Flosser/patternSolver.ts";
 import {useRef, useState} from "react";
 import FlossUsageTable from "./components/FlossUsageTable";
 import PatternViewer from "./components/PatternViewer";
+import SizeSpecEntry from "./components/SizeSpecEntry";
 
 function App() {
     const [imageData, setImageData] = useState(null);
 
     const [patternResult, setPatternResult] = useState(null);
 
-    const widthInputRef = useRef();
-    const heightInputRef = useRef();
+    const [dimensions, setDimensions] = useState(null);
+
     const maxColorsInputRef = useRef();
+
+    const solveImage = () => {
+        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value)))
+    }
 
   return (
     <div className="App">
@@ -28,21 +33,8 @@ function App() {
             })
           }}
         />
+          <SizeSpecEntry callback={setDimensions}/>
 
-          <label>Pattern Width:
-              <input
-                  ref={widthInputRef}
-                  type="number"
-                  defaultValue="50"
-              />
-          </label>
-          <label>Pattern Height:
-              <input
-                  ref={heightInputRef}
-                  type="number"
-                  defaultValue="50"
-              />
-          </label>
           <label>Max Colors:
               <input
                   ref={maxColorsInputRef}
@@ -51,11 +43,12 @@ function App() {
               />
           </label>
         <button
-            onClick={() => setPatternResult(solvePattern(imageData, parseInt(widthInputRef.current.value), parseInt(heightInputRef.current.value), parseInt(maxColorsInputRef.current.value)))}
+            onClick={solveImage}
             disabled={imageData == null}
         >Solve</button>
 
           {patternResult != null ?  <FlossUsageTable usages={patternResult.flossUsage}/> : null}
+
       </header>
     </div>
   );
