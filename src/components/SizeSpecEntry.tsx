@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useRef} from "react";
 
 const enum SelectionType {
     ABSOLUTE = "Absolute",
@@ -42,11 +42,9 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
             props.callback({width: patternWidthRef.current!.valueAsNumber, height: patternHeightRef.current!.valueAsNumber})
         } else {
             let fabricCount = fabricCountRef.current!.valueAsNumber;
-            props.callback({width: fabricWidthRef.current!.valueAsNumber * fabricCount, height: fabricHeightRef.current!.valueAsNumber * fabricCount})
+            props.callback({width: Math.floor(fabricWidthRef.current!.valueAsNumber * fabricCount), height: Math.floor(fabricHeightRef.current!.valueAsNumber * fabricCount)})
         }
     }
-
-    useEffect(() => onChange, [props])
 
     return <div>
         <label>Dimension Method:
@@ -59,63 +57,63 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
             </select>
         </label>
 
-        {selectionType === SelectionType.ABSOLUTE ?
+        {/* Absolute dimension method div */}
+        <div style={{display: selectionType === SelectionType.ABSOLUTE ? 'block' : 'none'}}>
             <div>
-                <div>
-                    <label>Pattern Width:
-                        <input
-                            ref={patternWidthRef}
-                            onChange={onChange}
-                            type="number"
-                            defaultValue="50"
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>Pattern Height:
-                        <input
-                            ref={patternHeightRef}
-                            onChange={onChange}
-                            type="number"
-                            defaultValue="50"
-                        />
-                    </label>
-                </div>
+                <label>Pattern Width:
+                    <input
+                        ref={patternWidthRef}
+                        onChange={onChange}
+                        type="number"
+                        defaultValue="50"
+                    />
+                </label>
             </div>
-            :
             <div>
-                <div>
-                    <label>Fabric Count:
-                        <input
-                            ref={fabricCountRef}
-                            onChange={onChange}
-                            type="number"
-                            defaultValue="14"
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>Fabric Height:
-                        <input
-                            ref={fabricHeightRef}
-                            onChange={onChange}
-                            type="number"
-                            defaultValue="3"
-                        />
-                    </label>
-                </div>
-                <div>
-                    <label>Fabric Width:
-                        <input
-                            ref={fabricWidthRef}
-                            onChange={onChange}
-                            type="number"
-                            defaultValue="3"
-                        />
-                    </label>
-                </div>
+                <label>Pattern Height:
+                    <input
+                        ref={patternHeightRef}
+                        onChange={onChange}
+                        type="number"
+                        defaultValue="50"
+                    />
+                </label>
             </div>
-        }
+        </div>
+
+        {/* Fabric spec dimension method div */}
+        <div style={{display: selectionType === SelectionType.FABRIC_SPEC ? 'block' : 'none'}}>
+            <div>
+                <label>Fabric Count:
+                    <input
+                        ref={fabricCountRef}
+                        onChange={onChange}
+                        type="number"
+                        defaultValue="14"
+                    />
+                </label>
+            </div>
+            <div>
+                <label>Fabric Height:
+                    <input
+                        ref={fabricHeightRef}
+                        onChange={onChange}
+                        type="number"
+                        defaultValue="3"
+                    />
+                </label>
+            </div>
+            <div>
+                <label>Fabric Width:
+                    <input
+                        ref={fabricWidthRef}
+                        onChange={onChange}
+                        type="number"
+                        defaultValue="3"
+                    />
+                </label>
+            </div>
+        </div>
     </div>
 }
 

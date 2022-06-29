@@ -11,7 +11,7 @@ function App() {
 
     const [patternResult, setPatternResult] = useState(null);
 
-    const [dimensions, setDimensions] = useState(null);
+    const [dimensions, setDimensions] = useState({width: 50, height: 50});
 
     const maxColorsInputRef = useRef();
 
