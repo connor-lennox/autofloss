@@ -41,6 +41,7 @@ function App() {
                 <input
                     type="file"
                     name="imageUpload"
+                    accept="image/*"
                     onChange={(event) => {
                         parseImage(URL.createObjectURL(event.target.files[0])).then(d => {
                             setImageData(d);
