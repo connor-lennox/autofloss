@@ -47,15 +47,18 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
     }
 
     return <div>
-        <label>Dimension Method:
-            <select value={selectionType} onChange={(event) => {
-                setSelectionType(event.target.value as SelectionType)
-                onChange()
-            }}>
-                <option value={SelectionType.ABSOLUTE}>Absolute</option>
-                <option value={SelectionType.FABRIC_SPEC}>Fabric Spec</option>
-            </select>
-        </label>
+        Size Specification
+        <div>
+            <label>Dimension Method:
+                <select value={selectionType} onChange={(event) => {
+                    setSelectionType(event.target.value as SelectionType)
+                    onChange()
+                }}>
+                    <option value={SelectionType.ABSOLUTE}>Absolute</option>
+                    <option value={SelectionType.FABRIC_SPEC}>Fabric Spec</option>
+                </select>
+            </label>
+        </div>
 
         {/* Absolute dimension method div */}
         <div style={{display: selectionType === SelectionType.ABSOLUTE ? 'block' : 'none'}}>

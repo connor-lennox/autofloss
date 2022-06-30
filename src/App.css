@@ -24,6 +24,11 @@
   color: white;
 }
 
+.Horizontal-flex {
+  display: flex;
+  flex-direction: row;
+}
+
 .App-link {
   color: #61dafb;
 }

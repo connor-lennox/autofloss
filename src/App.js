@@ -6,6 +6,7 @@ import {useRef, useState} from "react";
 import FlossUsageTable from "./components/FlossUsageTable";
 import PatternViewer from "./components/PatternViewer";
 import SizeSpecEntry from "./components/SizeSpecEntry";
+import BackgroundColorPicker from "./components/BackgroundColorPicker";
 
 function App() {
     const [imageData, setImageData] = useState(null);
@@ -13,11 +14,12 @@ function App() {
     const [patternResult, setPatternResult] = useState(null);
 
     const [dimensions, setDimensions] = useState({width: 50, height: 50});
+    const [backgroundColor, setBackgroundColor] = useState({red: 255, green: 255, blue: 255, alpha: 255})
 
     const maxColorsInputRef = useRef();
 
     const solveImage = () => {
-        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value), {red: 255, green: 255, blue: 255, alpha: 255}))
+        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value), backgroundColor))
     }
 
     const exportPattern = async () => {
@@ -45,7 +47,10 @@ function App() {
                         })
                     }}
                 />
-                <SizeSpecEntry callback={setDimensions}/>
+                <div className="Horizontal-flex">
+                    <SizeSpecEntry callback={setDimensions}/>
+                    <BackgroundColorPicker callback={setBackgroundColor}/>
+                </div>
 
                 <label>Max Colors:
                   <input
