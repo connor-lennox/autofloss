@@ -20,8 +20,6 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
 
     let pixelFlossDistances: Array<Map<FlossSpec, number>> = downsampledImage.data.map(pixel => getColorFlossDistances(pixel, backgroundFloss));
 
-    console.log(pixelFlossDistances[0].get(backgroundFloss))
-
     let workingImage = new Array(pixelFlossDistances.length).fill(backgroundFloss);
     let selectedColors = new Set<FlossSpec>();
     selectedColors.add(backgroundFloss);
@@ -93,10 +91,6 @@ const findBestColorToAdd = (working: Array<FlossSpec>, selected: Set<FlossSpec>,
 }
 
 const applyColor = (working: Array<FlossSpec>, distances: Array<Map<FlossSpec, number>>, specToApply: FlossSpec): Array<FlossSpec> => {
-    console.log(working)
-    console.log(distances[0])
-    console.log(working.map((curSpec, i) => distances[i].get(curSpec)))
-
     return working.map((curSpec, i) =>
         distances[i].get(specToApply)! < distances[i].get(curSpec)! ? specToApply : curSpec
     )
