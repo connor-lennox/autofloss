@@ -18,10 +18,20 @@ function App() {
     const [backgroundColor, setBackgroundColor] = useState({red: 255, green: 255, blue: 255, alpha: 255})
     const [guidelineSpec, setGuidelineSpec] = useState({xStep: 10, yStep: 10})
 
+    const maintainAspectRatioRef = useRef();
     const maxColorsInputRef = useRef();
 
     const solveImage = () => {
-        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value), backgroundColor))
+        let maintainRatio = maintainAspectRatioRef.current.checked
+
+        let passedDimensions = dimensions;
+        if(maintainRatio) {
+            let xScale = dimensions.width / imageData.width;
+            let yScale = dimensions.height / imageData.height;
+            let imageScale = Math.min(xScale, yScale);
+            passedDimensions = {width: Math.floor(imageData.width * imageScale), height: Math.floor(imageData.height * imageScale)}
+        }
+        setPatternResult(solvePattern(imageData, passedDimensions.width, passedDimensions.height, parseInt(maxColorsInputRef.current.value), backgroundColor))
     }
 
     const exportPattern = async () => {
@@ -56,13 +66,22 @@ function App() {
                     <GuidelineEntry callback={setGuidelineSpec}/>
                 </div>
 
-                <label>Max Colors:
-                  <input
-                      ref={maxColorsInputRef}
-                      type="number"
-                      defaultValue="5"
-                  />
-                </label>
+                <div className="Horizontal-flex">
+                    <label>Max Colors:
+                      <input
+                          ref={maxColorsInputRef}
+                          type="number"
+                          defaultValue="5"
+                      />
+                    </label>
+                    <label>Maintain Aspect Ratio:
+                        <input
+                            ref={maintainAspectRatioRef}
+                            type="checkbox"
+                            defaultChecked={true}
+                        />
+                    </label>
+                </div>
                 <button
                     onClick={solveImage}
                     disabled={imageData == null}
