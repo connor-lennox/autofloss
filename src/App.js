@@ -17,7 +17,7 @@ function App() {
     const maxColorsInputRef = useRef();
 
     const solveImage = () => {
-        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value)))
+        setPatternResult(solvePattern(imageData, dimensions.width, dimensions.height, parseInt(maxColorsInputRef.current.value), {red: 255, green: 255, blue: 255, alpha: 255}))
     }
 
     const exportPattern = async () => {

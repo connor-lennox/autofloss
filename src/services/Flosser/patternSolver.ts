@@ -1,6 +1,6 @@
 import {gaussianDownsample, PixelImage} from "../ImageProcessing";
 import {Color, colorDistance} from "../Colors";
-import {FlossSpec, flossSpecs, whiteFlossSpec} from "./flossSpec";
+import {FlossSpec, flossSpecs} from "./flossSpec";
 import {FlossUsage} from "../../components/FlossUsageTable";
 
 export type PatternResult = {
@@ -9,14 +9,22 @@ export type PatternResult = {
     flossUsage: Array<FlossUsage>
 }
 
-export const solvePattern = (image: PixelImage, targetWidth: number, targetHeight: number, maxColors: number): PatternResult => {
+export const solvePattern = (image: PixelImage, targetWidth: number, targetHeight: number, maxColors: number, backgroundColor: Color): PatternResult => {
     let downsampledImage = gaussianDownsample(image, targetWidth, targetHeight)
 
-    let pixelFlossDistances: Array<Map<FlossSpec, number>> = downsampledImage.data.map(pixel => getColorFlossDistances(pixel));
+    let backgroundFloss = {
+        id: 'background',
+        name: 'background',
+        color: backgroundColor
+    };
 
-    let workingImage = new Array(pixelFlossDistances.length).fill(whiteFlossSpec);
+    let pixelFlossDistances: Array<Map<FlossSpec, number>> = downsampledImage.data.map(pixel => getColorFlossDistances(pixel, backgroundFloss));
+
+    console.log(pixelFlossDistances[0].get(backgroundFloss))
+
+    let workingImage = new Array(pixelFlossDistances.length).fill(backgroundFloss);
     let selectedColors = new Set<FlossSpec>();
-    selectedColors.add(whiteFlossSpec);
+    selectedColors.add(backgroundFloss);
 
     for(let i = 0; i < maxColors; i++) {
         let bestSpec = findBestColorToAdd(workingImage, selectedColors, pixelFlossDistances);
@@ -29,7 +37,7 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
         return counts;
     }, new Map());
 
-    let flossUsage: Array<FlossUsage> = [...stitchesPerFloss.keys()].filter(s => s.id !== 'White').map(k => ({
+    let flossUsage: Array<FlossUsage> = [...stitchesPerFloss.keys()].filter(s => s.id !== 'background').map(k => ({
         spec: k,
         stitches: stitchesPerFloss.get(k) || 0
     }));
@@ -49,12 +57,18 @@ export const solvePattern = (image: PixelImage, targetWidth: number, targetHeigh
     }
 }
 
-const getColorFlossDistances = (color: Color): Map<FlossSpec, number> => {
-    return new Map(
+const getColorFlossDistances = (color: Color, background: FlossSpec): Map<FlossSpec, number> => {
+    // Calculate for available floss specs
+    let distanceMap = new Map(
         flossSpecs.map(spec => {
             return [spec, colorDistance(color, spec.color)]
         }),
     );
+
+    // Calculate distance for background color
+    distanceMap.set(background, colorDistance(color, background.color));
+
+    return distanceMap;
 }
 
 const findBestColorToAdd = (working: Array<FlossSpec>, selected: Set<FlossSpec>, distances: Array<Map<FlossSpec, number>>): FlossSpec => {
@@ -79,7 +93,11 @@ const findBestColorToAdd = (working: Array<FlossSpec>, selected: Set<FlossSpec>,
 }
 
 const applyColor = (working: Array<FlossSpec>, distances: Array<Map<FlossSpec, number>>, specToApply: FlossSpec): Array<FlossSpec> => {
+    console.log(working)
+    console.log(distances[0])
+    console.log(working.map((curSpec, i) => distances[i].get(curSpec)))
+
     return working.map((curSpec, i) =>
-        (distances[i].get(specToApply) || Number.MAX_VALUE) < (distances[i].get(curSpec) || Number.MAX_VALUE) ? specToApply : curSpec
+        distances[i].get(specToApply)! < distances[i].get(curSpec)! ? specToApply : curSpec
     )
 }
