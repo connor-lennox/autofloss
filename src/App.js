@@ -7,6 +7,7 @@ import FlossUsageTable from "./components/FlossUsageTable";
 import PatternViewer from "./components/PatternViewer";
 import SizeSpecEntry from "./components/SizeSpecEntry";
 import BackgroundColorPicker from "./components/BackgroundColorPicker";
+import GuidelineEntry from "./components/GuidelineEntry";
 
 function App() {
     const [imageData, setImageData] = useState(null);
@@ -15,6 +16,7 @@ function App() {
 
     const [dimensions, setDimensions] = useState({width: 50, height: 50});
     const [backgroundColor, setBackgroundColor] = useState({red: 255, green: 255, blue: 255, alpha: 255})
+    const [guidelineSpec, setGuidelineSpec] = useState({xStep: 10, yStep: 10})
 
     const maxColorsInputRef = useRef();
 
@@ -23,7 +25,7 @@ function App() {
     }
 
     const exportPattern = async () => {
-        let pdfBytes = await exportPatternPdf(patternResult)
+        let pdfBytes = await exportPatternPdf(patternResult, guidelineSpec)
         let blob = new Blob([pdfBytes], { type: 'application/pdf' })
         const a = document.createElement('a');
         a.download = 'stitch-spec.pdf';
@@ -51,6 +53,7 @@ function App() {
                 <div className="Horizontal-flex">
                     <SizeSpecEntry callback={setDimensions}/>
                     <BackgroundColorPicker callback={setBackgroundColor}/>
+                    <GuidelineEntry callback={setGuidelineSpec}/>
                 </div>
 
                 <label>Max Colors:

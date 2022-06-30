@@ -1,9 +1,17 @@
 import {grayscale, PDFDocument, rgb} from 'pdf-lib'
 import {PatternResult} from "../Flosser/patternSolver";
 import {getImagePixel} from "../ImageProcessing";
+import {GuidelineSpec} from "../../components/GuidelineEntry";
 
 
-export const exportPatternPdf = async (pattern: PatternResult) => {
+export const exportPatternPdf = async (pattern: PatternResult, guidelines: GuidelineSpec) => {
+    const guidelineXStep = guidelines.xStep;
+    const guidelineYStep = guidelines.yStep;
+
+    const blueColor = rgb(0, 0, 1);
+    const blackColor = rgb(0, 0, 0);
+    const redColor = rgb(1, 0, 0);
+
     let image = pattern.image;
 
     // Create a map of color -> id
@@ -49,6 +57,7 @@ export const exportPatternPdf = async (pattern: PatternResult) => {
         patternPage.drawLine({
             start: { x: x * imageScale + imageXStart, y: imageYStart },
             end: { x: x * imageScale + imageXStart, y: imageYEnd },
+            color: guidelineXStep !== 0 && (x % guidelineXStep) === 0 && x !== 0 && x !== image.width ? blueColor : blackColor,
             thickness: 1
         })
     }
@@ -56,6 +65,7 @@ export const exportPatternPdf = async (pattern: PatternResult) => {
         patternPage.drawLine({
             start: { x: imageXStart, y: y * imageScale + imageYStart },
             end: { x: imageXEnd, y: y * imageScale + imageYStart },
+            color: guidelineYStep !== 0 && ((image.height - y) % guidelineYStep) === 0 && y !== 0 && y !== image.height ? blueColor : blackColor,
             thickness: 1
         })
     }
@@ -65,14 +75,14 @@ export const exportPatternPdf = async (pattern: PatternResult) => {
         start: { x: (imageXEnd - imageXStart) / 2 + imageXStart, y: imageYStart },
         end: { x: (imageXEnd - imageXStart) / 2 + imageXStart, y : imageYEnd },
         thickness: 1,
-        color: rgb(1, 0, 0)
+        color: redColor
     })
 
     patternPage.drawLine({
         start: { x: imageXStart, y: (imageYEnd - imageYStart) / 2 + imageYStart },
         end: { x: imageXEnd, y : (imageYEnd - imageYStart) / 2 + imageYStart },
         thickness: 1,
-        color: rgb(1, 0, 0)
+        color: redColor
     })
 
 
@@ -150,6 +160,7 @@ export const exportPatternPdf = async (pattern: PatternResult) => {
         bwPatternPage.drawLine({
             start: { x: x * imageScale + imageXStart, y: imageYStart },
             end: { x: x * imageScale + imageXStart, y: imageYEnd },
+            color: guidelineXStep !== 0 && (x % guidelineXStep) === 0 && x !== 0 && x !== image.width ? blueColor : blackColor,
             thickness: 1
         })
     }
@@ -157,6 +168,7 @@ export const exportPatternPdf = async (pattern: PatternResult) => {
         bwPatternPage.drawLine({
             start: { x: imageXStart, y: y * imageScale + imageYStart },
             end: { x: imageXEnd, y: y * imageScale + imageYStart },
+            color: guidelineYStep !== 0 && ((image.height - y) % guidelineYStep) === 0 && y !== 0 && y !== image.height ? blueColor : blackColor,
             thickness: 1
         })
     }
