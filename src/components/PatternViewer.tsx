@@ -38,7 +38,9 @@ export default function PatternViewer(props: PatterViewerProps) {
             }
 
             // Clear anything that used to be on our canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.fillStyle = 'white'
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight)
 
             // Disable image smoothing: this is pixel art!
             ctx.imageSmoothingEnabled = false;
