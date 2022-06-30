@@ -26,7 +26,7 @@ function App() {
         let pdfBytes = await exportPatternPdf(patternResult)
         let blob = new Blob([pdfBytes], { type: 'application/pdf' })
         const a = document.createElement('a');
-        a.download = 'my-file.txt';
+        a.download = 'stitch-spec.pdf';
         a.href = URL.createObjectURL(blob);
         a.addEventListener('click', () => {
             setTimeout(() => URL.revokeObjectURL(a.href), 30 * 1000);
