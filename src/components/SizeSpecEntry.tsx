@@ -5,15 +5,6 @@ const enum SelectionType {
     FABRIC_SPEC = "Fabric Spec"
 }
 
-export type SizeSpec = {
-    method: SelectionType,
-    stitchWidth: number,
-    stitchHeight: number,
-    fabricCount: number,
-    fabricWidth: number,
-    fabricHeight: number
-}
-
 export type PixelDimension = {
     width: number,
     height: number
