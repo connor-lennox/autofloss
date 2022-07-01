@@ -29,6 +29,25 @@
   flex-direction: row;
 }
 
+.Specification-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  outline: whitesmoke solid 1px;
+  padding: 4px;
+  margin: 8px;
+}
+
+.Button-box {
+  display: flex;
+  flex-direction: row;
+  padding: 4px;
+  margin: 8px;
+  gap: 8px;
+  outline: whitesmoke solid 1px;
+}
+
 .App-link {
   color: #61dafb;
 }

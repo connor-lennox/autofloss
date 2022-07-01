@@ -7,7 +7,8 @@ const enum SelectionType {
 
 export type PixelDimension = {
     width: number,
-    height: number
+    height: number,
+    maintainAspectRatio: boolean
 }
 
 export type SizeSpecEntryProps = {
@@ -24,21 +25,31 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
     let fabricWidthRef = useRef<HTMLInputElement>(null)
     let fabricHeightRef = useRef<HTMLInputElement>(null)
 
+    let maintainAspectRatioRef = useRef<HTMLInputElement>(null)
+
     // If our selection type is set to Absolute, then we just want to get the pixel width/height.
     // If we have a Fabric Spec, we need to calculate out the width/height instead.
     // Either way, we just dump our 6 variables into the passed down setter.
 
     const onChange = () => {
         if(selectionType === SelectionType.ABSOLUTE) {
-            props.callback({width: patternWidthRef.current!.valueAsNumber, height: patternHeightRef.current!.valueAsNumber})
+            props.callback({
+                width: Math.floor(patternWidthRef.current!.valueAsNumber),
+                height: Math.floor(patternHeightRef.current!.valueAsNumber),
+                maintainAspectRatio: maintainAspectRatioRef.current!.checked
+            })
         } else {
             let fabricCount = fabricCountRef.current!.valueAsNumber;
-            props.callback({width: Math.floor(fabricWidthRef.current!.valueAsNumber * fabricCount), height: Math.floor(fabricHeightRef.current!.valueAsNumber * fabricCount)})
+            props.callback({
+                width: Math.floor(fabricWidthRef.current!.valueAsNumber * fabricCount),
+                height: Math.floor(fabricHeightRef.current!.valueAsNumber * fabricCount),
+                maintainAspectRatio: maintainAspectRatioRef.current!.checked
+            })
         }
     }
 
-    return <div>
-        Size Specification
+    return <div className="Specification-box">
+        <u>Size Specification:</u>
         <div>
             <label>Dimension Method:
                 <select value={selectionType} onChange={(event) => {
@@ -52,7 +63,7 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
         </div>
 
         {/* Absolute dimension method div */}
-        <div style={{display: selectionType === SelectionType.ABSOLUTE ? 'block' : 'none'}}>
+        <div style={{display: selectionType === SelectionType.ABSOLUTE ? 'contents' : 'none'}}>
             <div>
                 <label>Pattern Width:
                     <input
@@ -107,6 +118,16 @@ export default function SizeSpecEntry(props: SizeSpecEntryProps) {
                     />
                 </label>
             </div>
+        </div>
+
+        <div>
+            <label>Maintain Aspect Ratio:
+                <input
+                    ref={maintainAspectRatioRef}
+                    onChange={onChange}
+                    type="checkbox"
+                    defaultChecked={true}/>
+            </label>
         </div>
     </div>
 }

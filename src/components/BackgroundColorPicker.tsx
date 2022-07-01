@@ -14,8 +14,8 @@ export default function BackgroundColorPicker(props: BackgroundColorPickerProps)
         props.callback({red: redRef.current!.valueAsNumber, green: greenRef.current!.valueAsNumber, blue: blueRef.current!.valueAsNumber, alpha: 255})
     }
 
-    return <div>
-        Background Color
+    return <div className="Specification-box">
+        <u>Background Color:</u>
         <div>
             <label>Red:
                 <input

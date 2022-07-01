@@ -16,8 +16,8 @@ export default function GuidelineEntry(props: GuidelineEntryProps) {
 
     const onChange = () => props.callback({ xStep: xStepRef.current!.valueAsNumber, yStep: yStepRef.current!.valueAsNumber })
 
-    return <div>
-        Guidelines
+    return <div className="Specification-box">
+        <u>Guidelines:</u>
         <div>
             <label>X Step:
                 <input

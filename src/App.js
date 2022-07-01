@@ -18,11 +18,10 @@ function App() {
     const [backgroundColor, setBackgroundColor] = useState({red: 255, green: 255, blue: 255, alpha: 255})
     const [guidelineSpec, setGuidelineSpec] = useState({xStep: 10, yStep: 10})
 
-    const maintainAspectRatioRef = useRef();
     const maxColorsInputRef = useRef();
 
     const solveImage = () => {
-        let maintainRatio = maintainAspectRatioRef.current.checked
+        let maintainRatio = dimensions.maintainAspectRatio
 
         let passedDimensions = dimensions;
         if(maintainRatio) {
@@ -74,23 +73,19 @@ function App() {
                           defaultValue="5"
                       />
                     </label>
-                    <label>Maintain Aspect Ratio:
-                        <input
-                            ref={maintainAspectRatioRef}
-                            type="checkbox"
-                            defaultChecked={true}
-                        />
-                    </label>
                 </div>
-                <button
-                    onClick={solveImage}
-                    disabled={imageData == null}
-                >Solve</button>
 
-                <button
-                    onClick={exportPattern}
-                    disabled={patternResult == null}
-                >Export</button>
+                <div className="Button-box">
+                    <button
+                        onClick={solveImage}
+                        disabled={imageData == null}
+                    >Solve</button>
+
+                    <button
+                        onClick={exportPattern}
+                        disabled={patternResult == null}
+                    >Export</button>
+                </div>
 
               {patternResult != null ?  <FlossUsageTable usages={patternResult.flossUsage}/> : null}
 
